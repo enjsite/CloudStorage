@@ -56,6 +56,15 @@ public class MainController implements Initializable {
         }
     }
 
+    public void pressOnUploadBtn (ActionEvent actionEvent) throws IOException{
+        if (tfFileName.getLength() > 0) {
+            if (Files.exists(Paths.get("client_storage/" + tfFileName.getText()))) {
+                Network.sendMsg(new FileMessage(Paths.get("client_storage/" + tfFileName.getText())));
+                tfFileName.clear();
+            }
+        }
+    }
+
     public void refreshLocalFilesList() {
         updateUI(() -> {
             try {
