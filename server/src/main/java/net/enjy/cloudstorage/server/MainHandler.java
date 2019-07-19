@@ -8,6 +8,7 @@ import net.enjy.cloudstorage.common.FileRequest;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class MainHandler extends ChannelInboundHandlerAdapter {
     @Override
@@ -22,6 +23,8 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             }
             if (msg instanceof FileMessage) {
                 // Что делать если прилетел файл ??
+                FileMessage fm = (FileMessage) msg;
+                Files.write(Paths.get("server_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
             }
         } finally {
             ReferenceCountUtil.release(msg);
