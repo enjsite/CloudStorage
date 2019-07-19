@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import net.enjy.cloudstorage.common.AbstractMessage;
+import net.enjy.cloudstorage.common.FileListMessage;
 import net.enjy.cloudstorage.common.FileMessage;
 import net.enjy.cloudstorage.common.FileRequest;
 
@@ -25,6 +27,9 @@ public class MainController implements Initializable {
     @FXML
     ListView<String> filesList;
 
+    @FXML
+    ListView<String> serverFilesList;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Network.start();
@@ -36,6 +41,12 @@ public class MainController implements Initializable {
                         FileMessage fm = (FileMessage) am;
                         Files.write(Paths.get("client_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
                         refreshLocalFilesList();
+                    }
+                    if (am instanceof FileListMessage) {
+                        FileListMessage fl = (FileListMessage) am;
+                        for (String fileName : fl.getFileList()) {
+                            serverFilesList.getItems().add(fileName);
+                        }
                     }
                 }
             } catch (ClassNotFoundException | IOException e) {
@@ -63,6 +74,10 @@ public class MainController implements Initializable {
                 tfFileName.clear();
             }
         }
+    }
+
+    public void saveFileName(MouseEvent event) {
+        tfFileName.setText(filesList.getSelectionModel().getSelectedItem());
     }
 
     public void refreshLocalFilesList() {

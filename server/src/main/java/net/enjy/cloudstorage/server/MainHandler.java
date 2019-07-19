@@ -3,6 +3,7 @@ package net.enjy.cloudstorage.server;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import net.enjy.cloudstorage.common.FileListMessage;
 import net.enjy.cloudstorage.common.FileMessage;
 import net.enjy.cloudstorage.common.FileRequest;
 
@@ -26,6 +27,8 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 FileMessage fm = (FileMessage) msg;
                 Files.write(Paths.get("server_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
             }
+            FileListMessage fl = new FileListMessage(Paths.get("server_storage/"));
+            ctx.writeAndFlush(fl);
         } finally {
             ReferenceCountUtil.release(msg);
         }
