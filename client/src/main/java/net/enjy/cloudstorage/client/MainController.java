@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import net.enjy.cloudstorage.common.AbstractMessage;
-import net.enjy.cloudstorage.common.FileListMessage;
-import net.enjy.cloudstorage.common.FileMessage;
-import net.enjy.cloudstorage.common.FileRequest;
+import net.enjy.cloudstorage.common.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,9 +41,7 @@ public class MainController implements Initializable {
                     }
                     if (am instanceof FileListMessage) {
                         FileListMessage fl = (FileListMessage) am;
-                        for (String fileName : fl.getFileList()) {
-                            serverFilesList.getItems().add(fileName);
-                        }
+                        refreshServerFilesList(fl);
                     }
                 }
             } catch (ClassNotFoundException | IOException e) {
@@ -58,6 +53,7 @@ public class MainController implements Initializable {
         t.setDaemon(true);
         t.start();
         refreshLocalFilesList();
+        requestServerFilesList();
     }
 
     public void pressOnDownloadBtn(ActionEvent actionEvent) {
@@ -80,6 +76,10 @@ public class MainController implements Initializable {
         tfFileName.setText(filesList.getSelectionModel().getSelectedItem());
     }
 
+    public void saveServerFileName(MouseEvent event) {
+        tfFileName.setText(serverFilesList.getSelectionModel().getSelectedItem());
+    }
+
     public void refreshLocalFilesList() {
         updateUI(() -> {
             try {
@@ -89,6 +89,23 @@ public class MainController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void refreshServerFilesList(FileListMessage fl) {
+        updateUI(() -> {
+            try {
+                serverFilesList.getItems().clear();
+                for (String fileName : fl.getFileList()) {
+                    serverFilesList.getItems().add(fileName);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void requestServerFilesList() {
+        Network.sendMsg(new FileListRequest());
     }
 
     public static void updateUI(Runnable r) {

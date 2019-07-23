@@ -14,6 +14,6 @@
     </HBox>
     <HBox>
         <ListView fx:id="filesList" onMouseClicked="#saveFileName" VBox.vgrow="ALWAYS" />
-        <ListView fx:id="serverFilesList" onMouseClicked="#saveFileName" VBox.vgrow="ALWAYS" />
+        <ListView fx:id="serverFilesList" onMouseClicked="#saveServerFileName" VBox.vgrow="ALWAYS" />
     </HBox>
 </VBox>
