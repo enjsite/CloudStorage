@@ -6,6 +6,9 @@ import io.netty.util.ReferenceCountUtil;
 import net.enjy.cloudstorage.common.AuthMessage;
 import net.enjy.cloudstorage.common.AuthOk;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class AuthHandler extends ChannelInboundHandlerAdapter {
 
     private boolean authorized;
@@ -19,8 +22,14 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
                     String username = authMessage.getLogin();
                     authorized = true;
                     System.out.println("Authorized client");
+
+                    // проверяем, существует ли папка юзера, если нет - создаем
+                    if (Files.notExists(Paths.get("server_storage/" +username+ "/"))) {
+                        Files.createDirectory(Paths.get("server_storage/" +username+ "/"));
+                    }
+
                     AuthOk authOk = new AuthOk();
-                    ctx.writeAndFlush(authOk);//.await();
+                    ctx.writeAndFlush(authOk);
                     ctx.pipeline().addLast(new MainHandler(username));
                 }
             } else {
