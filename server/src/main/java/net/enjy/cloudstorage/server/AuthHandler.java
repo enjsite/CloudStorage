@@ -31,7 +31,6 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
                         Statement statement = connection.createStatement();
 
                         for(Client client : readAllClients(statement)) {
-                            System.out.println(client);
                             users.put(client.getLogin(), client.getPassword());
                         }
 

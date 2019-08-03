@@ -3,7 +3,6 @@ package net.enjy.cloudstorage.client;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
 import net.enjy.cloudstorage.common.AbstractMessage;
-import net.enjy.cloudstorage.common.AuthMessage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -41,15 +40,6 @@ public class Network {
         }
     }
 
-    /*public static void authorize(String login, String password) throws Exception {
-        try {
-            AuthMessage authMessage = new AuthMessage(login, password);
-            sendMsg(authMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public static boolean sendMsg(AbstractMessage msg) {
         try {
             out.writeObject(msg);
@@ -63,5 +53,9 @@ public class Network {
     public static AbstractMessage readObject() throws ClassNotFoundException, IOException {
         Object obj = in.readObject();
         return (AbstractMessage) obj;
+    }
+
+    public static boolean isConnected() {
+        return  !(socket == null || socket.isClosed());
     }
 }

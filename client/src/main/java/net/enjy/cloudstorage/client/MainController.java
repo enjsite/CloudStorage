@@ -1,7 +1,6 @@
 package net.enjy.cloudstorage.client;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,8 +20,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-
-    private boolean connected = false;
 
     @FXML
     TextField tfClientFileName;
@@ -62,7 +59,15 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Network.start();
+
+        refreshLocalFilesList();
+    }
+
+    public void connect() {
+        if (Network.isConnected()) {
+            return;
+        }
+            Network.start();
             Thread t = new Thread(() -> {
                 try {
                     while (true) {
@@ -89,11 +94,12 @@ public class MainController implements Initializable {
             });
             t.setDaemon(true);
             t.start();
-            refreshLocalFilesList();
+
     }
 
     public void pressOnAuthorizeBtn(ActionEvent actionEvent) {
         if ((tfLogin.getLength() > 0) && (tfPassword.getLength() > 0)) {
+            connect();
             Network.sendMsg(new AuthMessage(tfLogin.getText(), tfPassword.getText()));
         }
     }
