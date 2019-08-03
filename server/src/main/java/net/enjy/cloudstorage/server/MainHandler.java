@@ -31,20 +31,14 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             if (msg instanceof FileMessage) {
                 FileMessage fm = (FileMessage) msg;
                 Files.write(Paths.get("server_storage/" +username+ "/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
-                // если получили и сохранили файл на сервере - отправляем клиенту обновленный список файлов
-                FileListMessage fl = new FileListMessage(Paths.get("server_storage/" +username+ "/"));
-                ctx.writeAndFlush(fl);
+                sendFileListMessage(ctx);
             }
             if (msg instanceof FileDeleteRequest) {
                 FileDeleteRequest fdr = (FileDeleteRequest) msg;
                 Files.deleteIfExists(Paths.get("server_storage/" +username+ "/" + fdr.getFilename()));
-                // если удалили файл на сервере - отправляем клиенту обновленный список файлов
-                FileListMessage fl = new FileListMessage(Paths.get("server_storage/" +username+ "/"));
-                ctx.writeAndFlush(fl);
+                sendFileListMessage(ctx);
             }
             if (msg instanceof FileListRequest) {
-                //FileListMessage fl = new FileListMessage(Paths.get("server_storage/" +username+ "/"));
-                //ctx.writeAndFlush(fl);
                 sendFileListMessage(ctx);
             }
 
