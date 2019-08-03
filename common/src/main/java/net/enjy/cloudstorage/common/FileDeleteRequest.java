@@ -1,6 +1,6 @@
 package net.enjy.cloudstorage.common;
 
-public class FileRequest extends AbstractMessage {
+public class FileDeleteRequest extends AbstractMessage {
 
     private String filename;
 
@@ -8,7 +8,7 @@ public class FileRequest extends AbstractMessage {
         return filename;
     }
 
-    public FileRequest(String filename) {
+    public FileDeleteRequest(String filename) {
         this.filename = filename;
     }
 }

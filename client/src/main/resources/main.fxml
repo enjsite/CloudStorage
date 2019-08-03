@@ -5,12 +5,35 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox fx:id="rootNode" alignment="CENTER" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: linear-gradient(#fff 0%, #eee 10%, #ddd 90%, #bbb 100%);" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="net.enjy.cloudstorage.client.MainController">
-    <HBox>
-        <TextField fx:id="tfFileName" focusTraversable="false" promptText="Укажите имя файла, который хотите скачать или отправить" HBox.hgrow="ALWAYS" />
-        <Button onAction="#pressOnDownloadBtn" text="Скачать" />
-        <Button onAction="#pressOnUploadBtn" text="Отправить" />
+<VBox fx:id="rootNode" alignment="CENTER" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: linear-gradient(#fff 0%, #eee 10%, #ddd 90%, #bbb 100%);" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="net.enjy.cloudstorage.client.MainController">
+    <HBox fx:id="hbNotAuth">
+        <Text>Авторизуйтесь: </Text>
+        <TextField fx:id="tfLogin" focusTraversable="false" promptText="Login" HBox.hgrow="ALWAYS" />
+        <TextField fx:id="tfPassword" focusTraversable="false" promptText="Password" HBox.hgrow="ALWAYS" />
+        <Button fx:id="btnAuthorize" onAction="#pressOnAuthorizeBtn" text="Войти" />
     </HBox>
-    <ListView fx:id="filesList" VBox.vgrow="ALWAYS" />
+    <HBox fx:id="hbAuth" visible="false" managed="false">
+        <Text>Вы авторизованы: </Text>
+        <Text fx:id="tLogin"></Text>
+    </HBox>
+    <HBox>
+        <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <ListView fx:id="filesList" onMouseClicked="#saveFileName" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"  />
+            <HBox fx:id="hbCommandsClient" visible="false" managed="false">
+                <TextField fx:id="tfClientFileName" focusTraversable="false" promptText="Укажите имя файла" HBox.hgrow="ALWAYS" />
+                <Button onAction="#pressOnUploadBtn" text="Отправить" />
+                <Button onAction="#pressOnDeleteClientFileBtn" text="Удалить" />
+            </HBox>
+        </VBox>
+        <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <ListView fx:id="serverFilesList" onMouseClicked="#saveServerFileName" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"  />
+            <HBox fx:id="hbCommandsServer" visible="false" managed="false">
+                <TextField fx:id="tfServerFileName" focusTraversable="false" promptText="Укажите имя файла" HBox.hgrow="ALWAYS" />
+                <Button onAction="#pressOnDownloadBtn" text="Скачать" />
+                <Button onAction="#pressOnDeleteServerFileBtn" text="Удалить" />
+            </HBox>
+        </VBox>
+    </HBox>
 </VBox>

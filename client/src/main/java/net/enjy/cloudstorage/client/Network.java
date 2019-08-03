@@ -54,4 +54,8 @@ public class Network {
         Object obj = in.readObject();
         return (AbstractMessage) obj;
     }
+
+    public static boolean isConnected() {
+        return  !(socket == null || socket.isClosed());
+    }
 }
